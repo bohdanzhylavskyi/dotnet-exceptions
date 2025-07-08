@@ -18,7 +18,7 @@ namespace Task3
         public void AddTaskForUser(int userId, UserTask task)
         {
             if (userId < 0)
-                throw new InvalidUserIdException(userId);
+                throw new InvalidUserIdException();
 
             var user = _userDao.GetUser(userId);
 

@@ -13,7 +13,7 @@ namespace Task3.Exceptions
 
     public class InvalidUserIdException : DomainException
     {
-        public InvalidUserIdException(int userId): base($"Invalid userId: {userId}")
+        public InvalidUserIdException(): base("Invalid userId")
         {
         }
     }

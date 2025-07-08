@@ -2,7 +2,6 @@
 
 namespace Task2
 {
-
     internal enum Sign
     {
         Positive,
@@ -15,7 +14,7 @@ namespace Task2
         {
             if (stringValue is null)
             {
-                throw new ArgumentNullException("'stringValue' can't be null");
+                throw new ArgumentNullException(nameof(stringValue), "Input can't be null");
             }
 
             var stringValueTrimmed = stringValue.Trim();
@@ -23,23 +22,22 @@ namespace Task2
             if (stringValueTrimmed.Length == 0)
                 throw new FormatException("Input should not be empty and should contain at least one non-space character");
 
-            Sign? explicitSign = stringValueTrimmed[0] == '+'
-                                ? Sign.Positive
-                                : (stringValueTrimmed[0] == '-'
-                                    ? Sign.Negative
-                                    : (Sign?)null);
+            return ParseNumberString(stringValueTrimmed);
+        }
 
-            bool isSignExplicitlySpecified = explicitSign != null;
-
-            int result = 0;
-            int startIndex = isSignExplicitlySpecified ? 1 : 0;
+        private int ParseNumberString(string numberStr)
+        {
+            Sign? explicitSign = ResolveExplicitSignIfAny(numberStr);
             Sign sign = explicitSign ?? Sign.Positive;
 
-            for (int i = startIndex; i < stringValueTrimmed.Length; i++)
-            {
-                char c = stringValueTrimmed[i];
+            int result = 0;
+            int startIndex = explicitSign != null ? 1 : 0;
 
-                if (c < '0' || c > '9')
+            for (int i = startIndex; i < numberStr.Length; i++)
+            {
+                char c = numberStr[i];
+
+                if (!char.IsDigit(c))
                     throw new FormatException($"Invalid character '{c}' in input");
 
                 result = sign == Sign.Positive
@@ -48,6 +46,21 @@ namespace Task2
             }
 
             return result;
+        }
+
+        private Sign? ResolveExplicitSignIfAny(string numberStr)
+        {
+            if (numberStr[0] == '+')
+            {
+                return Sign.Positive;
+            }
+            
+            if (numberStr[0] == '-')
+            {
+                return Sign.Negative;
+            }
+
+            return null;
         }
 
     }
