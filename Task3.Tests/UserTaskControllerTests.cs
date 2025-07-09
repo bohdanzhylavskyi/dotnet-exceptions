@@ -29,7 +29,7 @@ namespace Task3.Tests
             Assert.That(result, Is.EqualTo(true));
             Assert.That(model.GetActionResult(), Is.Null);
             Assert.That(_userDao.GetUser(userId).Tasks.Count, Is.EqualTo(4));
-            StringAssert.AreEqualIgnoringCase(_userDao.GetUser(userId).Tasks[3].Description, description);
+            StringAssert.AreEqualIgnoringCase(description, _userDao.GetUser(userId).Tasks[3].Description);
         }
 
         [Test]
@@ -42,7 +42,7 @@ namespace Task3.Tests
             bool result = _controller.AddTaskForUser(userId, description, model);
 
             Assert.That(result, Is.EqualTo(false));
-            StringAssert.AreEqualIgnoringCase(model.GetActionResult(), "Invalid userId");
+            StringAssert.AreEqualIgnoringCase("Invalid userId", model.GetActionResult());
             Assert.That(_userDao.GetUser(existingUserId).Tasks.Count, Is.EqualTo(3));
         }
 
@@ -56,22 +56,22 @@ namespace Task3.Tests
             bool result = _controller.AddTaskForUser(userId, description, model);
 
             Assert.That(result, Is.EqualTo(false));
-            StringAssert.AreEqualIgnoringCase(model.GetActionResult(), "User not found");
+            StringAssert.AreEqualIgnoringCase("User not found", model.GetActionResult());
             Assert.That(_userDao.GetUser(existingUserId).Tasks.Count, Is.EqualTo(3));
         }
 
         [Test]
-        public void CreateUserTask_NonExistentUser_ReturnsNullAndTheTaskAlreadyExistsMessage()
+        public void CreateUserTask_ReturnsNullAndTheTaskAlreadyExistsMessage()
         {
             var model = new ResponseModelStub();
-            string description = "task4";
-            int userId = 2, existingUserId = 1;
+            string description = "task1";
+            int userId = 1;
 
             bool result = _controller.AddTaskForUser(userId, description, model);
 
             Assert.That(result, Is.EqualTo(false));
-            StringAssert.AreEqualIgnoringCase(model.GetActionResult(), "User not found");
-            Assert.That(_userDao.GetUser(existingUserId).Tasks.Count, Is.EqualTo(3));
+            StringAssert.AreEqualIgnoringCase("The task already exists", model.GetActionResult());
+            Assert.That(_userDao.GetUser(userId).Tasks.Count, Is.EqualTo(3));
         }
     }
 }

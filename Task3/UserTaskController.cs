@@ -21,7 +21,7 @@ namespace Task3
             {
                 _taskService.AddTaskForUser(userId, task);
                 return true;
-            } catch (DomainException e)
+            } catch (BaseException e)
             {
                 model.AddAttribute("action_result", e.Message);
 

@@ -18,18 +18,18 @@ namespace Task3
         public void AddTaskForUser(int userId, UserTask task)
         {
             if (userId < 0)
-                throw new InvalidUserIdException();
+                throw new InvalidUserIdException(userId);
 
             var user = _userDao.GetUser(userId);
 
             if (user == null)
-                throw new UserNotFoundException();
+                throw new UserNotFoundException(userId);
 
             var userTasks = user.Tasks;
 
             if (CheckForTaskDuplicate(userTasks, task))
             {
-                throw new TaskDuplicateException();
+                throw new TaskDuplicateException(userId, task.Description);
             }
 
             userTasks.Add(task);

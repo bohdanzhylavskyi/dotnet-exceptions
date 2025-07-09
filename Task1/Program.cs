@@ -30,6 +30,11 @@ namespace Task1
 
         private static void PrintFirstCharacter(string text)
         {
+            if (text is null)
+            {
+                throw new ArgumentNullException(nameof(text), "Text cannot be null.");
+            }
+
             if (text.Length == 0)
             {
                 throw new ArgumentException("Text should not be empty.");
